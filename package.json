@@ -1,0 +1,30 @@
+{
+  "name": "blogflow-project",
+  "version": "1.0.0",
+  "description": "This is a very basic project for blog project with in memory storage",
+  "homepage": "https://github.com/sourav-357/blog-flow-Api#readme",
+  "bugs": {
+    "url": "https://github.com/sourav-357/blog-flow-Api/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sourav-357/blog-flow-Api.git"
+  },
+  "license": "ISC",
+  "author": "sourav kumar",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.0",
+    "express": "^5.2.1",
+    "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
