@@ -24,6 +24,10 @@ A REST API for a blogging platform built with Node.js and Express. This is a beg
 
 ## Installation
 
+
+
+
+
 1. Clone or download this repository
 2. Navigate to the project directory:
    ```bash
