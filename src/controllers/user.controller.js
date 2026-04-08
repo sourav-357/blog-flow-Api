@@ -1,16 +1,7 @@
 
 
 import * as store from '../data/store.js'
-
-
-class AppError extends Error {
-  constructor(message, statusCode) {
-    super(message)
-    this.statusCode = statusCode
-    this.isOperational = true
-    Error.captureStackTrace(this, this.constructor)
-  }
-}
+import AppError from '../utils/AppError.js'
 
 
 
@@ -18,16 +9,16 @@ class AppError extends Error {
 export const getAllUsers = (req, res) => {
   try {
     const users = store.users
-    res.status(200).json({ 
-      success: true, 
-      message: 'Users fetched successfully', 
-      data: users 
+    res.status(200).json({
+      success: true,
+      message: 'Users fetched successfully',
+      data: users
     })
   } catch (err) {
-    res.status(err.statusCode || 500).json({ 
-      success: false, 
-      message: err.message, 
-      data: null 
+    res.status(err.statusCode || 500).json({
+      success: false,
+      message: err.message,
+      data: null
     })
   }
 }
@@ -39,16 +30,16 @@ export const getUserById = (req, res) => {
   try {
     const user = store.users.find((u) => u.id === parseInt(req.params.id))
     if (!user) throw new AppError('User not found', 404)
-    res.status(200).json({ 
-      success: true, 
-      message: 'User fetched successfully', 
-      data: user 
+    res.status(200).json({
+      success: true,
+      message: 'User fetched successfully',
+      data: user
     })
   } catch (err) {
-    res.status(err.statusCode || 500).json({ 
-      success: false, 
-      message: err.message, 
-      data: null 
+    res.status(err.statusCode || 500).json({
+      success: false,
+      message: err.message,
+      data: null
     })
   }
 }
@@ -69,16 +60,16 @@ export const createUser = (req, res) => {
       createdAt: new Date().toISOString(),
     }
     store.users.push(user)
-    res.status(201).json({ 
-      success: true, 
-      message: 'User created successfully', 
-      data: user 
+    res.status(201).json({
+      success: true,
+      message: 'User created successfully',
+      data: user
     })
   } catch (err) {
-    res.status(err.statusCode || 500).json({ 
-      success: false, 
-      message: err.message, 
-      data: null 
+    res.status(err.statusCode || 500).json({
+      success: false,
+      message: err.message,
+      data: null
     })
   }
 }
@@ -93,15 +84,15 @@ export const updateUser = (req, res) => {
 
     store.users[index] = { ...store.users[index], ...req.body }
     const user = store.users[index]
-    res.status(200).json({ 
-      success: true, 
-      message: 'User updated successfully', 
-      data: user 
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully',
+      data: user
     })
   } catch (err) {
-    res.status(err.statusCode || 500).json({ 
-      success: false, 
-      message: err.message, 
+    res.status(err.statusCode || 500).json({
+      success: false,
+      message: err.message,
       data: null
     })
   }
@@ -115,16 +106,16 @@ export const deleteUser = (req, res) => {
     if (index === -1) throw new AppError('User not found', 404)
 
     store.users.splice(index, 1)
-    res.status(200).json({ 
-      success: true, 
-      message: 'User deleted successfully', 
-      data: null 
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully',
+      data: null
     })
   } catch (err) {
-    res.status(err.statusCode || 500).json({ 
-      success: false, 
-      message: err.message, 
-      data: null 
+    res.status(err.statusCode || 500).json({
+      success: false,
+      message: err.message,
+      data: null
     })
   }
 }

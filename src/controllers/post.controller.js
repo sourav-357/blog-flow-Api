@@ -1,13 +1,5 @@
 import * as store from '../data/store.js'
-
-class AppError extends Error {
-  constructor(message, statusCode) {
-    super(message)
-    this.statusCode = statusCode
-    this.isOperational = true
-    Error.captureStackTrace(this, this.constructor)
-  }
-}
+import AppError from '../utils/AppError.js'
 
 export const getAllPosts = (req, res) => {
   try {
