@@ -1,7 +1,11 @@
+
+
 import express from 'express'
 import * as postController from '../controllers/post.controller.js'
 
+
 const router = express.Router()
+
 
 router.get('/', postController.getAllPosts)
 router.get('/:id', postController.getPostById)
@@ -11,4 +15,6 @@ router.patch('/:id', postController.updatePost)
 router.patch('/:id/publish', postController.publishPost)
 router.delete('/:id', postController.deletePost)
 
+
 export default router
+

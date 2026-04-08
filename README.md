@@ -57,20 +57,10 @@ blogflow-api/
 │   │   ├── user.controller.js      # User request handlers
 │   │   └── post.controller.js      # Post request handlers
 │   ├── services/
-│   │   ├── user.service.js         # User business logic
-│   │   └── post.service.js         # Post business logic
 │   ├── routes/
 │   │   ├── index.js                # Route aggregator
 │   │   ├── user.routes.js          # User endpoints
 │   │   └── post.routes.js          # Post endpoints
-│   ├── middleware/
-│   │   ├── errorHandler.js         # Global error middleware
-│   │   ├── notFound.js             # 404 handler
-│   │   ├── asyncHandler.js         # Async error wrapper
-│   │   └── validateBody.js         # Request validation
-│   ├── utils/
-│   │   ├── AppError.js             # Custom error class
-│   │   └── response.js             # Response helpers
 │   ├── data/
 │   │   └── store.js                # In-memory storage
 │   └── app.js                      # Express app setup
@@ -83,13 +73,12 @@ blogflow-api/
 
 ## How It Works
 
-### Architecture Pattern: Controller → Service → Store
+### Architecture Pattern: Controller → Store
 
 1. **Routes** receive HTTP requests
-2. **Controller** handles request/response, calls service
-3. **Service** contains all business logic
-4. **Store** manages in-memory data (like a database)
-5. **Middleware** handles validation, errors, logging
+2. **Controllers** handle requests, contain business logic, and interact directly with the store
+3. **Store** manages in-memory data (like a database)
+4. **Middleware** handles validation, errors, logging
 
 ### Error Handling
 
