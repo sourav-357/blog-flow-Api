@@ -1,89 +1,53 @@
-# BlogFlow API 📝
+# BlogFlow API
 
-A REST API for a blogging platform built with Node.js and Express. This is a beginner-friendly project featuring in-memory storage with clean architecture principles (separation of concerns).
+A robust, production-ready REST API for a modern blogging platform built with Node.js and Express. This API provides comprehensive user and post management with advanced features like pagination, filtering, and status-based publishing.
 
-## Features
+## 🚀 Features
 
-- ✅ User management (create, read, update, delete users)
-- ✅ Blog post management with draft/publish workflow
-- ✅ Query filtering and pagination for posts
-- ✅ Input validation middleware
-- ✅ Global error handling
-- ✅ Consistent JSON response format
-- ✅ Environment configuration with dotenv
-- ✅ HTTP request logging with Morgan
-- ✅ CORS enabled for frontend integration
+- **User Management**: Complete CRUD operations for user accounts with email uniqueness validation
+- **Post Management**: Full blog post lifecycle including drafting, publishing, and content management
+- **Advanced Filtering**: Query posts by author, status, with pagination support
+- **Error Handling**: Centralized error handling with custom error classes and consistent response formats
+- **Input Validation**: Built-in validation for all endpoints
+- **CORS Support**: Cross-origin resource sharing enabled for frontend integration
+- **Request Logging**: Morgan middleware for comprehensive request logging
+- **Health Check**: Built-in health endpoint for monitoring and load balancer checks
+- **Environment Configuration**: Flexible configuration via environment variables
 
-## Tech Stack
+## 🛠 Tech Stack
 
-- **Express** - Web framework
-- **dotenv** - Environment variables management
-- **Morgan** - HTTP request logger
-- **CORS** - Cross-Origin Resource Sharing
-- **Nodemon** - Auto-restart during development (dev only)
+- **Runtime**: Node.js (ES Modules)
+- **Framework**: Express.js
+- **Middleware**: Morgan (logging), CORS
+- **Data Storage**: In-memory storage (easily replaceable with database)
+- **Development**: Nodemon for hot reloading
 
-## Installation
+## 📋 Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn package manager
 
 
+## 📚 API Documentation
 
-
-
-1. Clone or download this repository
-2. Navigate to the project directory:
-   ```bash
-   cd blogflow-api
-   ```
-
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-4. Start the server:
-   ```bash
-   npm run dev
-   ```
-
-The server will run on `http://localhost:3000`
-
-## Project Structure
-
+### Base URL
 ```
-blogflow-api/
-├── src/
-│   ├── config/
-│   │   └── config.js              # Environment configuration
-│   ├── controllers/
-│   │   ├── user.controller.js      # User request handlers
-│   │   └── post.controller.js      # Post request handlers
-│   ├── services/
-│   ├── routes/
-│   │   ├── index.js                # Route aggregator
-│   │   ├── user.routes.js          # User endpoints
-│   │   └── post.routes.js          # Post endpoints
-│   ├── data/
-│   │   └── store.js                # In-memory storage
-│   └── app.js                      # Express app setup
-├── .env                            # Environment variables
-├── .env.example                    # Example env file
-├── .gitignore                      # Git ignore rules
-├── package.json                    # Dependencies
-└── server.js                       # Entry point
+http://localhost:3000/api/v1
 ```
 
-## How It Works
+### Response Format
+All responses follow a consistent JSON structure:
 
-### Architecture Pattern: Controller → Store
+**Success Response:**
+```json
+{
+  "success": true,
+  "message": "Operation successful",
+  "data": { ... }
+}
+```
 
-1. **Routes** receive HTTP requests
-2. **Controllers** handle requests, contain business logic, and interact directly with the store
-3. **Store** manages in-memory data (like a database)
-4. **Middleware** handles validation, errors, logging
-
-### Error Handling
-
-All errors are caught by the global error handler and return a consistent JSON format:
-
+**Error Response:**
 ```json
 {
   "success": false,
@@ -92,109 +56,218 @@ All errors are caught by the global error handler and return a consistent JSON f
 }
 ```
 
-### Response Format
+### Endpoints
 
-All successful responses follow this format:
+#### Health Check
+- **GET** `/health`
+- **Description**: Check server health status
+- **Response**: `{"success": true, "message": "Server is healthy"}`
 
-```json
-{
-  "success": true,
-  "message": "Action completed successfully",
-  "data": { }
-}
-```
+#### User Management
 
-## API Documentation
+##### Get All Users
+- **GET** `/users`
+- **Description**: Retrieve all users
+- **Response**: Array of user objects
 
-See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for complete endpoint reference.
+##### Get User by ID
+- **GET** `/users/:id`
+- **Description**: Retrieve a specific user
+- **Parameters**: `id` (integer) - User ID
+- **Response**: User object
 
-### Quick Start - Example Requests
+##### Create User
+- **POST** `/users`
+- **Description**: Create a new user
+- **Body**:
+  ```json
+  {
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+  ```
+- **Response**: Created user object
 
-**Create a user:**
-```bash
-POST /api/v1/users
-Content-Type: application/json
+##### Update User
+- **PUT/PATCH** `/users/:id`
+- **Description**: Update an existing user
+- **Parameters**: `id` (integer) - User ID
+- **Body**: Partial user object
+- **Response**: Updated user object
 
-{
-  "name": "John Doe",
-  "email": "john@example.com"
-}
-```
+##### Delete User
+- **DELETE** `/users/:id`
+- **Description**: Delete a user
+- **Parameters**: `id` (integer) - User ID
+- **Response**: Success message
 
-**Create a post (after creating a user with id=1):**
-```bash
-POST /api/v1/posts
-Content-Type: application/json
+#### Post Management
 
-{
-  "title": "My First Post",
-  "content": "This is the post content",
-  "authorId": 1
-}
-```
+##### Get All Posts
+- **GET** `/posts`
+- **Description**: Retrieve posts with optional filtering and pagination
+- **Query Parameters**:
+  - `authorId` (integer): Filter by author
+  - `status` (string): Filter by status (draft/published)
+  - `page` (integer): Page number (default: 1)
+  - `limit` (integer): Items per page (default: 10)
+- **Response**: Paginated post list with metadata
 
-**Publish a post:**
-```bash
-PATCH /api/v1/posts/1/publish
-```
+##### Get Post by ID
+- **GET** `/posts/:id`
+- **Description**: Retrieve a specific post
+- **Parameters**: `id` (integer) - Post ID
+- **Response**: Post object
 
-**Get posts with filters:**
-```bash
-GET /api/v1/posts?authorId=1&status=published&page=1&limit=10
-```
+##### Create Post
+- **POST** `/posts`
+- **Description**: Create a new blog post
+- **Body**:
+  ```json
+  {
+    "title": "My Blog Post",
+    "content": "Post content here...",
+    "authorId": 1,
+    "status": "draft"
+  }
+  ```
+- **Response**: Created post object
 
-## Available Scripts
+##### Update Post
+- **PUT/PATCH** `/posts/:id`
+- **Description**: Update an existing post
+- **Parameters**: `id` (integer) - Post ID
+- **Body**: Partial post object
+- **Response**: Updated post object
 
-```bash
-npm run start    # Start production server
-npm run dev      # Start dev server with auto-reload
-npm run test     # Run tests (placeholder)
-```
+##### Publish Post
+- **PATCH** `/posts/:id/publish`
+- **Description**: Publish a draft post
+- **Parameters**: `id` (integer) - Post ID
+- **Response**: Published post object
 
-## Testing
+##### Delete Post
+- **DELETE** `/posts/:id`
+- **Description**: Delete a post
+- **Parameters**: `id` (integer) - Post ID
+- **Response**: Success message
 
-Use **Postman** to test the API. You can import the endpoints using the Postman collection link provided below.
+## 🧪 Testing with Postman
 
-[**Postman Collection Link**](https://your-postman-collection-link-here)
+### Postman Collection
+Import the following endpoints into Postman for comprehensive testing:
 
-## Data Storage
+1. **Health Check**
+   - Method: GET
+   - URL: `http://localhost:3000/api/v1/health`
+   - Expected Response: `{"success": true, "message": "Server is healthy"}`
 
-This project uses **in-memory storage** (arrays in JavaScript). Data is cleared when the server restarts. This is intentional for learning purposes. 
+2. **Create User**
+   - Method: POST
+   - URL: `http://localhost:3000/api/v1/users`
+   - Headers: `Content-Type: application/json`
+   - Body:
+     ```json
+     {
+       "name": "Test User",
+       "email": "test@example.com"
+     }
+     ```
+   - Expected Response: User object with ID and timestamps
 
-For production:
-- Integrate a database like MongoDB, PostgreSQL, or MySQL
-- Modify `src/data/store.js` to use database queries instead of array operations
+3. **Get All Users**
+   - Method: GET
+   - URL: `http://localhost:3000/api/v1/users`
+   - Expected Response: Array of user objects
 
-## Error Codes
+4. **Get User by ID**
+   - Method: GET
+   - URL: `http://localhost:3000/api/v1/users/1`
+   - Expected Response: Single user object
 
-- `400` - Bad Request (missing or invalid fields)
-- `404` - Not Found (user/post doesn't exist, invalid route)
-- `409` - Conflict (duplicate email)
-- `500` - Server Error (unexpected error)
+5. **Create Post**
+   - Method: POST
+   - URL: `http://localhost:3000/api/v1/posts`
+   - Headers: `Content-Type: application/json`
+   - Body:
+     ```json
+     {
+       "title": "Sample Post",
+       "content": "This is a sample blog post content.",
+       "authorId": 1,
+       "status": "draft"
+     }
+     ```
+   - Expected Response: Post object with author details
 
-## Development Notes
+6. **Get All Posts**
+   - Method: GET
+   - URL: `http://localhost:3000/api/v1/posts`
+   - Expected Response: Paginated response with posts array and metadata
 
-- Middleware execution order matters (see `src/app.js`)
-- Always wrap async controllers with `asyncHandler()` to catch errors
-- Services throw `AppError` with proper status codes
-- Validation happens in routes using `validateBody()` middleware
+7. **Get Posts with Filters**
+   - Method: GET
+   - URL: `http://localhost:3000/api/v1/posts?authorId=1&status=draft&page=1&limit=5`
+   - Expected Response: Filtered and paginated posts
 
-## Next Steps
+8. **Publish Post**
+   - Method: PATCH
+   - URL: `http://localhost:3000/api/v1/posts/1/publish`
+   - Expected Response: Updated post with status "published"
 
-To extend this project:
+9. **Update User**
+   - Method: PUT
+   - URL: `http://localhost:3000/api/v1/users/1`
+   - Headers: `Content-Type: application/json`
+   - Body:
+     ```json
+     {
+       "name": "Updated Name"
+     }
+     ```
+   - Expected Response: Updated user object
 
-1. **Add Comments feature** - Users can comment on posts
-2. **Add Authentication** - Use JWT tokens for user login
-3. **Add Database** - Replace in-memory store with MongoDB or PostgreSQL
-4. **Add Pagination** - Already partially implemented for posts
-5. **Add Search** - Full-text search for posts and users
-6. **Add Rate Limiting** - Prevent API abuse
-7. **Add Unit Tests** - Jest or Mocha for testing
+10. **Update Post**
+    - Method: PATCH
+    - URL: `http://localhost:3000/api/v1/posts/1`
+    - Headers: `Content-Type: application/json`
+    - Body:
+      ```json
+      {
+        "title": "Updated Title"
+      }
+      ```
+    - Expected Response: Updated post object
 
-## License
+11. **Delete Post**
+    - Method: DELETE
+    - URL: `http://localhost:3000/api/v1/posts/1`
+    - Expected Response: Success message
 
-ISC
+12. **Delete User**
+    - Method: DELETE
+    - URL: `http://localhost:3000/api/v1/users/1`
+    - Expected Response: Success message
 
-## Questions?
+### Sample Test Flow
+1. Create a user (POST /users)
+2. Create a post with that user's ID (POST /posts)
+3. Get all posts (GET /posts)
+4. Publish the post (PATCH /posts/:id/publish)
+5. Update the user (PUT /users/:id)
+6. Delete the post (DELETE /posts/:id)
+7. Delete the user (DELETE /users/:id)
 
-Review the code structure starting with `server.js` → `src/app.js` → `src/routes/index.js` to understand the flow.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+
+## 📞 Support
+
+For issues and questions, please open a GitHub issue.
